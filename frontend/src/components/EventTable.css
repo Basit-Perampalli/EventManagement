@@ -1,0 +1,145 @@
+/* Search input */
+.search-input {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease-in-out;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* Parent container with fixed position */
+.table-dashboard {
+    width: 100%;
+    max-width: 1200px;
+    /* Adjust width as needed */
+    height: 400px;
+    /* Fixed height */
+    margin: 0 auto;
+    /* Center the table-dashboard */
+    position: relative;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Make the table container scrollable */
+.table-container {
+    width: 100%;
+    min-height: 400px;
+    overflow: auto;
+    /* Allow both horizontal and vertical scrolling */
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+    /* Prevent the table content from wrapping and allow it to stretch horizontally */
+}
+
+/* Table styling */
+.table {
+    width: auto;
+    /* Allow the table to expand based on its content */
+    min-width: 100%;
+    /* Ensures the table takes up at least the full width of the container */
+    border-collapse: collapse;
+    font-size: 16px;
+    text-align: left;
+    table-layout: auto;
+    /* Allow columns to adjust based on content */
+}
+
+/* Table header */
+.thead-eventfrom {
+    background-color: #007bff;
+    color: white;
+}
+
+.thead-eventfrom th {
+    padding: 12px 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+    white-space: nowrap;
+    /* Prevent header from wrapping */
+}
+
+/* Table rows */
+.table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.table tbody td {
+    padding: 12px 15px;
+    white-space: nowrap;
+    /* Prevent data from wrapping */
+}
+
+/* Actions button styles */
+.action-btn {
+    padding: 6px 12px;
+    margin-right: 5px;
+    font-size: 14px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.action-btn:hover {
+    background-color: #0056b3;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* Pagination styles */
+.pagination {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination button {
+    padding: 8px 16px;
+    margin: 0 5px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+    background-color: #0056b3;
+}
+
+/* No events message */
+.no-events {
+    text-align: center;
+    padding: 20px;
+    font-size: 16px;
+    color: #555;
+}

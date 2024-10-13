@@ -202,7 +202,7 @@ html {
 }
 
 /* Search Bar Styling */
-input[type="text"] {
+.navbar-topnav input[type="text"] {
   padding: 8px 15px;
   border-radius: 20px;
   /* Rounded edges */
@@ -221,11 +221,28 @@ input[type="text"] {
 }
 
 /* Expand the input and change border color on focus */
-input[type="text"]:focus {
+.navbar-topnav input[type="text"]:focus {
   width: 250px;
   /* Expand width on focus */
   border-color: #007bff;
   /* Change border color on focus */
+}
+
+.createbtn {
+  height: 40px;
+  width: 160px;
+}
+
+.eventformbutton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.thead-eventfrom {
+  border: 1px solid blue;
 }
 
 /* App.css */
