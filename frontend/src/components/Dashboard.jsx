@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
-import EventTable from './EventTable';
+import EventCards from './EventCards';
 import axios from 'axios';
 
 const Dashboard = () => {
-    // States to store the calculated stats
+
     const [totalEvents, setTotalEvents] = useState(0);
     const [incompleteEvents, setIncompleteEvents] = useState(0);
     const [completeEvents, setCompleteEvents] = useState(0);
     const [eventCategories, setEventCategories] = useState(0);
 
-    // Function to fetch data from backend
+
     const fetchEvents = async () => {
         try {
             const token = localStorage.getItem('accessToken'); // Get access token from localStorage
@@ -69,7 +69,7 @@ const Dashboard = () => {
                     <p>Complete Events</p>
                 </div>
             </div>
-            <EventTable />
+            <EventCards />
         </div>
     );
 };

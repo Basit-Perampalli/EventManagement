@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import './EventTable.css'
+import './EventCards.css'; 
 const WEBSOCKET_URL = 'ws://your-django-backend-url/ws/events/';
 
-const EventTable = () => {
+const EventCards = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -90,8 +90,8 @@ const EventTable = () => {
     }
 
     return (
-        <div className='table-dashboard'>
-            {/* Search Bar */}
+        <div className='cards-dashboard'>
+        
             <div className="search-filters">
                 <div>
                     <label htmlFor="titleSearch">Search by Title</label>
@@ -135,56 +135,35 @@ const EventTable = () => {
                 </div>
             </div>
 
-
-            {/* Event Table */}
-            <div className="table-container">
+            {/* Event Cards */}
+            <div className="cards-container">
                 <h3>Event List</h3>
-                <table className="table">
-                    <thead className='thead-eventfrom'>
-                        <tr>
-                            <th>#</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Location</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Organizer</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentEvents.length > 0 ? (
-                            currentEvents.map((event, index) => (
-                                <tr key={event.id}>
-                                    <td>{indexOfFirstEvent + index + 1}</td>
-                                    <td>{event.title}</td>
-                                    <td>{event.description}</td>
-                                    <td>{event.location}</td>
-                                    <td>{new Date(event.start_date).toLocaleString()}</td>
-                                    <td>{new Date(event.end_date).toLocaleString()}</td>
-                                    <td>{event.organizer}</td>
-                                    <td>{event.status}</td>
-                                    <td>
-                                        <button
-                                            className="action-btn"
-                                            onClick={() => toggleEventStatus(event.id, event.status)}
-                                        >
-                                            {event.status === 'public' ? 'Mark Private' : 'Mark Public'}
-                                        </button>
-                                        <button className="action-btn">View</button>
-                                        <button className="action-btn">Edit</button>
-                                        <button className="action-btn delete-btn">Delete</button>
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="9" className="no-events">No events available</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                {currentEvents.length > 0 ? (
+                    currentEvents.map((event, index) => (
+                        <div className="event-card" key={event.id}>
+                            <h4>{event.title}</h4>
+                            <p>{event.description}</p>
+                            <p><strong>Location:</strong> {event.location}</p>
+                            <p><strong>Start Date:</strong> {new Date(event.start_date).toLocaleString()}</p>
+                            <p><strong>End Date:</strong> {new Date(event.end_date).toLocaleString()}</p>
+                            <p><strong>Organizer:</strong> {event.organizer}</p>
+                            <p><strong>Status:</strong> {event.status}</p>
+                            <div className="event-actions">
+                                <button
+                                    className="action-btn"
+                                    onClick={() => toggleEventStatus(event.id, event.status)}
+                                >
+                                    {event.status === 'public' ? 'Mark Private' : 'Mark Public'}
+                                </button>
+                                <button className="action-btn">View</button>
+                                <button className="action-btn">Edit</button>
+                                <button className="action-btn delete-btn">Delete</button>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className="no-events">No events available</div>
+                )}
             </div>
 
             {/* Pagination */}
@@ -199,4 +178,4 @@ const EventTable = () => {
     );
 };
 
-export default EventTable;
+export default EventCards;
