@@ -1,6 +1,5 @@
 /* Global styles for login and signup pages */
 
-
 .firstauth {
     display: flex;
     align-items: center;
@@ -14,17 +13,15 @@
     background-color: white;
     border-radius: 12px;
     padding: 40px 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    /* Fixed width for the container */
-    height: 400px;
-    /* Fixed height for the container */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.447);
+    width: 390px;
+    /* Increased width for better spacing */
+    height: auto;
+    /* Allow height to adjust based on content */
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Center items horizontally */
     justify-content: center;
-    /* Center items vertically */
     text-align: center;
     animation: fadeIn 0.8s ease;
 }
@@ -36,41 +33,49 @@
     justify-content: center;
     flex-direction: column;
     width: 100%;
-    /* Full width of the container */
-    height: 100%;
-    /* Full height of the container */
+    height: auto;
+    /* Allow height to adjust based on content */
 }
 
 .auth-form h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
+    margin-bottom: 25px;
+    /* Increased margin for better spacing */
+    font-size: 26px;
+    /* Slightly larger font size */
     color: #333;
 }
 
 .input-group {
     margin-bottom: 20px;
     width: 100%;
-    /* Full width of input group */
 }
 
 .input-group label {
     display: block;
     font-size: 14px;
     margin-bottom: 5px;
-    color: #888;
+    color: #000000;
     text-align: left;
 }
 
-.input-group input {
+.input-group input,
+.input-group select {
     width: 100%;
     padding: 12px 15px;
     font-size: 16px;
-    border: 1px solid #ddd;
+    border: 1px solid #707070;
     border-radius: 6px;
     transition: border-color 0.3s;
 }
 
-.input-group input:focus {
+/* Style for the select dropdown */
+.input-group select {
+    background-color: white;
+    cursor: pointer;
+}
+
+.input-group input:focus,
+.input-group select:focus {
     border-color: #00d2ff;
     outline: none;
 }
@@ -111,6 +116,16 @@
     color: #b721ff;
 }
 
+.error {
+    color: #ff0000;
+    margin-bottom: 10px;
+}
+
+.success {
+    color: #28a745;
+    margin-bottom: 10px;
+}
+
 /* Animation for form fading in */
 @keyframes fadeIn {
     from {
@@ -129,7 +144,6 @@
     .auth-container {
         padding: 30px 20px;
         width: 90%;
-        /* Responsive width for smaller screens */
     }
 
     .auth-btn {

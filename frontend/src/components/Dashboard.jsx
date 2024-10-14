@@ -12,40 +12,37 @@ const Dashboard = () => {
     // Function to fetch data from backend
     const fetchEvents = async () => {
         try {
-            const response = await axios.get('/api/events'); // Adjust this API endpoint to your actual backend URL
-            const events = response.data || []; // Ensure we get an array, even if the response is null or undefined
+            const token = localStorage.getItem('accessToken'); // Get access token from localStorage
+            const response = await axios.get('http://localhost:8000/event/all/', {
+                headers: {
+                    Authorization: `Bearer ${token}` // Pass the access token in the request header
+                }
+            });
+            const events = response.data || [];
 
             if (events.length === 0) {
-                // If there are no events, ensure all counts are 0
                 setTotalEvents(0);
                 setIncompleteEvents(0);
                 setCompleteEvents(0);
                 setEventCategories(0);
             } else {
-                // Calculate total events
                 setTotalEvents(events.length);
-
-                // Calculate incomplete events
-                const incomplete = events.filter(event => !event.isComplete); // Assuming `isComplete` field marks completion
+                const incomplete = events.filter(event => !event.isComplete);
                 setIncompleteEvents(incomplete.length);
-
-                // Calculate complete events
                 const complete = events.filter(event => event.isComplete);
                 setCompleteEvents(complete.length);
-
-                // Calculate unique event categories
-                const categories = [...new Set(events.map(event => event.category))]; // Extract unique categories
+                const categories = [...new Set(events.map(event => event.category))];
                 setEventCategories(categories.length);
             }
         } catch (error) {
             console.error('Error fetching events:', error);
-            // Set everything to 0 if there is an error fetching the events
             setTotalEvents(0);
             setIncompleteEvents(0);
             setCompleteEvents(0);
             setEventCategories(0);
         }
     };
+
 
     // Fetch events when the component mounts
     useEffect(() => {

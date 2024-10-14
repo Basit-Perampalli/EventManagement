@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import './LoginSignup.css';
 
 const Login = () => {
@@ -9,14 +10,32 @@ const Login = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const token = localStorage.getItem("refreshToken");
+        if (token) {
+            // Function to fetch new tokens can be implemented here
+            // If access token is valid, redirect
+            // navigate('/dashboard');
+        }
+    }, []);
+
     const handleLogin = async (e) => {
         e.preventDefault();
+
+        if (!email || !password) {
+            toast.error('Both fields are required');
+            return;
+        }
+
         try {
-            const response = await axios.post('/api/login', { email, password });
-            localStorage.setItem('token', response.data.token); // Store the token in local storage
-            navigate('/dashboard'); // Redirect to dashboard or home page
+            const response = await axios.post('http://localhost:8000/auth/login/', { email, password });
+            const { access, refresh } = response.data;
+            localStorage.setItem('accessToken', access); // Store access token
+            localStorage.setItem('refreshToken', refresh); // Store refresh token
+            navigate('/home'); // Redirect to dashboard
         } catch (error) {
-            setError(`Invalid email or password ${error}`);
+            setError('Invalid email or password');
+            console.error('Login error:', error);
         }
     };
 

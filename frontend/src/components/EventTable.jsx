@@ -13,11 +13,12 @@ const EventTable = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [eventsPerPage] = useState(10);
     const [socket, setSocket] = useState(null);
+    const [refreshEvents, setRefreshEvents] = useState(false); // New state for refreshing
 
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await fetch('http://127.0.0.1:8000/event/all/');
+                const response = await fetch('http://localhost:8000/event/all/');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -48,6 +49,10 @@ const EventTable = () => {
         };
     }, []);
 
+    const handleEventCreated = () => {
+        setRefreshEvents(prev => !prev); // Toggle refresh state to fetch events again
+    };
+
     const filteredEvents = events.filter(event => {
         const matchesSearchTerm = event.title.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesLocation = locationFilter === '' || event.location.toLowerCase().includes(locationFilter.toLowerCase());
@@ -64,7 +69,7 @@ const EventTable = () => {
 
     const toggleEventStatus = async (eventId, currentStatus) => {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/events/${eventId}/toggle/`, {
+            const response = await fetch(`http://localhost:8000/event/${eventId}/toggle/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: currentStatus === 'public' ? 'private' : 'public' })
