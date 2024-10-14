@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './EventTable.css'
 const WEBSOCKET_URL = 'ws://your-django-backend-url/ws/events/';
 
@@ -7,14 +7,18 @@ const EventTable = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [locationFilter, setLocationFilter] = useState('');
+    const [startDateFilter, setStartDateFilter] = useState('');
+    const [endDateFilter, setEndDateFilter] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [eventsPerPage] = useState(10);
     const [socket, setSocket] = useState(null);
+    const [refreshEvents, setRefreshEvents] = useState(false); // New state for refreshing
 
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await fetch('http://127.0.0.1:8000/event/all/');
+                const response = await fetch('http://localhost:8000/event/all/');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -45,9 +49,17 @@ const EventTable = () => {
         };
     }, []);
 
-    const filteredEvents = events.filter(event =>
-        event.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const handleEventCreated = () => {
+        setRefreshEvents(prev => !prev); // Toggle refresh state to fetch events again
+    };
+
+    const filteredEvents = events.filter(event => {
+        const matchesSearchTerm = event.title.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesLocation = locationFilter === '' || event.location.toLowerCase().includes(locationFilter.toLowerCase());
+        const matchesDateRange = (startDateFilter === '' || new Date(event.start_date) >= new Date(startDateFilter)) &&
+            (endDateFilter === '' || new Date(event.end_date) <= new Date(endDateFilter));
+        return matchesSearchTerm && matchesLocation && matchesDateRange;
+    });
 
     const indexOfLastEvent = currentPage * eventsPerPage;
     const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
@@ -57,7 +69,7 @@ const EventTable = () => {
 
     const toggleEventStatus = async (eventId, currentStatus) => {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/events/${eventId}/toggle/`, {
+            const response = await fetch(`http://localhost:8000/event/${eventId}/toggle/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: currentStatus === 'public' ? 'private' : 'public' })
@@ -79,14 +91,54 @@ const EventTable = () => {
 
     return (
         <div className='table-dashboard'>
-            <input
-                type="text"
-                className="search-input"
-                placeholder="Search events"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
+            {/* Search Bar */}
+            <div className="search-filters">
+                <div>
+                    <label htmlFor="titleSearch">Search by Title</label>
+                    <input
+                        type="text"
+                        id="titleSearch"
+                        className="search-input"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="locationFilter">Search by Location</label>
+                    <input
+                        type="text"
+                        id="locationFilter"
+                        className="search-input"
+                        value={locationFilter}
+                        onChange={(e) => setLocationFilter(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="startDate">Start Date</label>
+                    <input
+                        type="date"
+                        id="startDate"
+                        className="search-input"
+                        value={startDateFilter}
+                        onChange={(e) => setStartDateFilter(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="endDate">End Date</label>
+                    <input
+                        type="date"
+                        id="endDate"
+                        className="search-input"
+                        value={endDateFilter}
+                        onChange={(e) => setEndDateFilter(e.target.value)}
+                    />
+                </div>
+            </div>
+
+
+            {/* Event Table */}
             <div className="table-container">
+                <h3>Event List</h3>
                 <table className="table">
                     <thead className='thead-eventfrom'>
                         <tr>

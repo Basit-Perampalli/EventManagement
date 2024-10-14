@@ -13,10 +13,12 @@ const EventCreationForm = ({ onClose }) => {
         const eventData = { title, description, location, startDate, endDate, organizer, is_public: true };
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/events/create/', {
+            const token = localStorage.getItem('accessToken'); // Get the access token from localStorage
+            const response = await fetch('http://localhost:8000/event/create/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`, // Include the authorization token
                 },
                 body: JSON.stringify(eventData),
             });
@@ -30,6 +32,7 @@ const EventCreationForm = ({ onClose }) => {
             console.error('Error:', error);
         }
     };
+
 
     return (
         <div className="popup-overlay">

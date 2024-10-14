@@ -1,15 +1,23 @@
 import React from 'react';
-import '../App.css'
+import { useNavigate } from 'react-router-dom';
+import '../App.css';
+
 const TopNavBar = () => {
+    const navigate = useNavigate();
+
+    // Function to handle logout
+    const handleLogout = () => {
+        localStorage.removeItem('accessToken');  // Remove access token from localStorage
+        localStorage.removeItem('refreshToken'); // Remove refresh token from localStorage
+        navigate('/');  // Redirect to login page
+    };
+
     return (
         <div className="top-nav">
             <div className="logo">Event Management</div>
-            <nav className='navbar-topnav'>
-                <div className="notifications">
-                    <span>🔔 3</span>
-                    <span>💬 15</span>
-                </div>
-            </nav>
+            <div className="nav-links">
+                <button onClick={handleLogout} className="logout-btn">Logout</button>
+            </div>
         </div>
     );
 };

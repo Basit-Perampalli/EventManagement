@@ -1,30 +1,29 @@
-import React, { useState } from 'react';
-import Sidebar from './components/Sidebar';
-import TopNavBar from './components/TopNavBar';
-import EventCreationForm from './components/EventForm';
-import Dashboard from './components/Dashboard'
-import './App.css'; // Include styles
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import Home from './components/Home';
+import ForgotPassword from './components/ForgotPassword'; // Import ForgotPassword component
+import './App.css';
 
 const App = () => {
-  const [isFormOpen, setIsFormOpen] = useState(false);
-
-  const handleCreateEventClick = () => {
-    setIsFormOpen(true);
-  };
-
-  const handleCloseForm = () => {
-    setIsFormOpen(false);
-  };
-
   return (
-    <div className="App">
-      <Sidebar onCreateEventClick={handleCreateEventClick} />
-      <div className="main-content">
-        <TopNavBar />
-        <Dashboard />
-        {isFormOpen && <EventCreationForm onClose={handleCloseForm} />}
+    <Router>
+      <div className="App">
+        <Routes>
+          {/* Default route for Login */}
+          <Route path="/" element={<Login />} />
+
+          {/* Route for Signup page */}
+          <Route path="/signup" element={<Signup />} />
+
+          {/* Route for Forgot Password page */}
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+
+          {/* Protected route for Home page */}
+          <Route path="/home" element={<Home />} />
+        </Routes>
       </div>
-    </div>
+    </Router>
   );
 };
 
