@@ -10,10 +10,10 @@ const EventCreationForm = ({ onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const eventData = { title, description, location, startDate, endDate, organizer };
+        const eventData = { title, description, location, startDate, endDate, organizer, is_public: true };
 
         try {
-            const response = await fetch('http://your-django-backend-url/api/events/', {
+            const response = await fetch('http://127.0.0.1:8000/events/create/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

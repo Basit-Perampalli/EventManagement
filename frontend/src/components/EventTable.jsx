@@ -17,7 +17,7 @@ const EventTable = () => {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await fetch('http://your-django-backend-url/api/events/');
+                const response = await fetch('http://127.0.0.1:8000/event/all/');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -64,7 +64,7 @@ const EventTable = () => {
 
     const toggleEventStatus = async (eventId, currentStatus) => {
         try {
-            const response = await fetch(`http://your-django-backend-url/api/events/${eventId}/toggle-status/`, {
+            const response = await fetch(`http://127.0.0.1:8000/events/${eventId}/toggle/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: currentStatus === 'public' ? 'private' : 'public' })
