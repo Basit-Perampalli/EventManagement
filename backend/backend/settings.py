@@ -36,6 +36,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -50,7 +51,18 @@ INSTALLED_APPS = [
     "rest_framework",
     'rest_framework_simplejwt',
     "corsheaders",
+    'channels',
 ]
+
+# Channels settings
+ASGI_APPLICATION = 'backend.asgi.application'
+
+# WebSocket settings
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    }
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
