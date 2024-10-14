@@ -55,7 +55,7 @@ const Dashboard = () => {
     return (
         <div className="dashboard">
             <div className="stats">
-                <div className="stat-card" style={{ backgroundColor: '#1ea488' }}>
+                <div className="stat-card" style={{ backgroundColor: '#17a2b8' }}>
                     <h3>{eventCategories}</h3>
                     <p>Event Categories</p>
                 </div>
