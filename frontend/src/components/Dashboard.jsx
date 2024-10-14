@@ -20,6 +20,10 @@ const Dashboard = () => {
             });
             const events = response.data || [];
 
+
+
+
+
             if (events.length === 0) {
                 setTotalEvents(0);
                 setIncompleteEvents(0);
