@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './LoginSignup.css';
@@ -13,19 +13,35 @@ const Signup = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const navigate = useNavigate();
 
+
+    useEffect(() => {
+        const token = localStorage.getItem("refreshToken");
+        if (token) {
+            navigate('/home');
+        }
+    }, []);
+
     const handleSignup = async (e) => {
         e.preventDefault();
         setError('');
         setSuccessMessage('');
 
+
         try {
             const response = await axios.post('http://localhost:8000/auth/register/', {
+
                 first_name: firstName,
                 last_name: lastName,
                 email,
                 password,
                 user_type: userType
             });
+
+            const { access, refresh, user_type } = response.data;
+            localStorage.setItem('accessToken', access); // Store access token
+            localStorage.setItem('usertype', user_type); // Store access token
+            localStorage.setItem('refreshToken', refresh); // Store refresh token
+            navigate('/home'); // Redirect to dashboard
 
             setSuccessMessage('Signup successful! Redirecting to login...');
             setTimeout(() => navigate('/'), 2000); // Redirect after success

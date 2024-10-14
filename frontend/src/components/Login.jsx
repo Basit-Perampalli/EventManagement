@@ -13,9 +13,7 @@ const Login = () => {
     useEffect(() => {
         const token = localStorage.getItem("refreshToken");
         if (token) {
-            // Function to fetch new tokens can be implemented here
-            // If access token is valid, redirect
-            // navigate('/dashboard');
+            navigate('/home');
         }
     }, []);
 
@@ -29,8 +27,9 @@ const Login = () => {
 
         try {
             const response = await axios.post('http://localhost:8000/auth/login/', { email, password });
-            const { access, refresh } = response.data;
+            const { access, refresh, user_type } = response.data;
             localStorage.setItem('accessToken', access); // Store access token
+            localStorage.setItem('usertype', user_type); // Store access token
             localStorage.setItem('refreshToken', refresh); // Store refresh token
             navigate('/home'); // Redirect to dashboard
         } catch (error) {
