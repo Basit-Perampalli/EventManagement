@@ -42,17 +42,42 @@
 
 .table {
     width: 100%;
-    border-collapse: collapse;
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-collapse: collapse;
+    /* Ensures borders are collapsed into a single border */
+    border: 1px solid #ddd;
+    /* Outer border for the entire table */
 }
 
+.table-container h3 {
+    font-weight: 400;
+    padding: 10px;
+    background-color: white;
+}
 
+.table th,
+.table td {
+    border: 1.5px solid #ddd;
+    /* Border for each cell */
+    padding: 10px;
+    /* Add some padding for better spacing */
+    text-align: left;
+    background-color: white;
+    /* Align text to the left */
+}
+
+.table th {
+    background-color: #f4f4f4;
+    /* Optional: Different background color for table headers */
+    font-weight: bold;
+    /* Make header text bold */
+}
 
 .thead-eventfrom {
-    background-color: #007bff;
-    color: white;
+    background-color: white;
+    color: black;
 }
 
 .thead-eventfrom th {

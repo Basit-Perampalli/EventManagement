@@ -4,12 +4,7 @@ const TopNavBar = () => {
     return (
         <div className="top-nav">
             <div className="logo">Event Management</div>
-            <nav className='navbar-topnav'>
-                <div className="notifications">
-                    <span>🔔 3</span>
-                    <span>💬 15</span>
-                </div>
-            </nav>
+
         </div>
     );
 };

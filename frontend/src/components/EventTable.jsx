@@ -133,6 +133,7 @@ const EventTable = () => {
 
             {/* Event Table */}
             <div className="table-container">
+                <h3>Event List</h3>
                 <table className="table">
                     <thead className='thead-eventfrom'>
                         <tr>
