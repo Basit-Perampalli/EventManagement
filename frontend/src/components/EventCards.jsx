@@ -147,8 +147,8 @@ const EventCards = () => {
             </div>
 
             {/* Event Cards */}
+            <h3>Event List</h3>
             <div className="cards-container">
-                <h3>Event List</h3>
                 {currentEvents.length > 0 ? (
                     currentEvents.map((event, index) => (
                         <div className="event-card" key={event.id}>
