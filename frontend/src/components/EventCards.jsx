@@ -3,12 +3,12 @@ import './EventCards.css';
 import '../App.css'
 import { EventContext } from '../context/EventContext';
 
-const EventCards = ({events,usertype}) => {
-    
+const EventCards = ({ events }) => {
+
     // const [currentPage, setCurrentPage] = useState(1);
     // const [eventsPerPage] = useState(10);
-    // const [usertype,setUsertype] = useState('regular');
-    const{searchTerm, setSearchTerm,locationFilter,toggleEventStatus, setLocationFilter,dateFilter, setDateFilter,loading} = useContext(EventContext)
+
+    const { searchTerm, setSearchTerm, locationFilter, deleteEvent, toggleEventStatus, setLocationFilter, dateFilter, setDateFilter, loading } = useContext(EventContext)
 
     // useEffect(() => {
     //     const ut = localStorage.getItem('usertype');
@@ -82,7 +82,7 @@ const EventCards = ({events,usertype}) => {
                                     </button>
                                     <button className="action-btn">View</button>
                                     <button className="action-btn">Edit</button>
-                                    <button className="action-btn delete-btn">Delete</button>
+                                    <button className="action-btn delete-btn" onClick={() => deleteEvent(event.id)}>Delete</button>
                                 </div>
                             }
                         </div>

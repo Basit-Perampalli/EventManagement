@@ -38,20 +38,43 @@ export const EventProvider = ({ children }) => {
             setLoading(false);
         }
     };
-    // const eventurl = 
-    useEffect(() => {
-        console.log(searchTerm,dateFilter)
-        fetchEvents();
-    }, [searchTerm,dateFilter]);
+    // const eventurl =
+        useEffect(() => {
+            console.log(searchTerm, dateFilter)
+            fetchEvents();
+        }, [searchTerm, dateFilter]);
 
-    useEffect(()=>{
-        console.log(messages)
-        if (messages.event_type==='delete'){
-            setEvents(events.filter((e)=>e.id!==messages.data.id))
-        }else{
-            setEvents(events.map((e)=>e.id===messages.data.id?messages.data:e))
+        useEffect(()=>{
+            console.log(messages)
+            if (messages.event_type==='delete'){
+                setEvents(events.filter((e)=>e.id!==messages.data.id))
+            }else{
+                setEvents(events.map((e)=>e.id===messages.data.id?messages.data:e))
+            }
+        },[messages])
+
+    const deleteEvent = async (eventId) => {
+        console.log(eventId);
+        try {
+            const token = localStorage.getItem('accessToken');
+            const response = await fetch(`http://127.0.0.1:8000/event/${eventId}/delete/`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (response.ok) {
+                toast.info('Successfully deleted');
+                // Update the events state to remove the deleted event
+                setEvents((prevEvents) => prevEvents.filter((event) => event.id !== eventId));
+            } else {
+                throw new Error('Failed to delete the event');
+            }
+        } catch (error) {
+            console.log(`Failed to delete event: ${error}`);
         }
-    },[messages])
+    };
 
     const toggleEventStatus = async (eventId) => {
         console.log(eventId)
@@ -59,10 +82,11 @@ export const EventProvider = ({ children }) => {
             const token = localStorage.getItem('accessToken');
             const response = await fetch(`http://127.0.0.1:8000/event/${eventId}/toggle/`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json',
+                headers: {
+                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
-                 },
-                
+                },
+
             });
             if (response.ok) {
                 toast.info('Successfully changed the visibility')
@@ -72,8 +96,9 @@ export const EventProvider = ({ children }) => {
         }
     };
 
+
     return (
-        <EventContext.Provider value={{ events, loading, toggleEventStatus, setEvents,searchTerm, setSearchTerm,locationFilter, setLocationFilter,dateFilter, setDateFilter }}>
+        <EventContext.Provider value={{ events, loading, deleteEvent, toggleEventStatus, setEvents, searchTerm, setSearchTerm, locationFilter, setLocationFilter, dateFilter, setDateFilter }}>
             {children}
         </EventContext.Provider>
     );
