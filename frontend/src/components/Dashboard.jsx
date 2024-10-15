@@ -14,6 +14,7 @@ const Dashboard = () => {
 
     const fetchEventsAnalytics = async () => {
         try {
+            console.log(events.length)
             if (events.length === 0) {
                 setTotalEvents(0);
                 setIncompleteEvents(0);
@@ -63,7 +64,7 @@ const Dashboard = () => {
                     <p>Complete Events</p>
                 </div>
             </div>
-            <EventCards events={events}/>
+            <EventCards events={events} usertype={'regular'}/>
         </div>
     );
 };

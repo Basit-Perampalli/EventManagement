@@ -2,26 +2,23 @@ import { useContext, useEffect, useState } from 'react';
 import './EventCards.css';
 import '../App.css'
 import { EventContext } from '../context/EventContext';
-const WEBSOCKET_URL = 'ws://your-django-backend-url/ws/events/';
 
-const EventCards = ({events}) => {
+const EventCards = ({events,usertype}) => {
     
-    const [currentPage, setCurrentPage] = useState(1);
-    const [eventsPerPage] = useState(10);
-
+    // const [currentPage, setCurrentPage] = useState(1);
+    // const [eventsPerPage] = useState(10);
+    // const [usertype,setUsertype] = useState('regular');
     const{searchTerm, setSearchTerm,locationFilter,toggleEventStatus, setLocationFilter,dateFilter, setDateFilter,loading} = useContext(EventContext)
 
     // useEffect(() => {
-
+    //     const ut = localStorage.getItem('usertype');
+    //     setUsertype(ut)
     // }, []);
 
-    const indexOfLastEvent = currentPage * eventsPerPage;
-    const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
-    events = events.slice(indexOfFirstEvent, indexOfLastEvent);
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    // const indexOfLastEvent = currentPage * eventsPerPage;
+    // const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
+    // events = events.slice(indexOfFirstEvent, indexOfLastEvent);
+    // const paginate = (pageNumber) => setCurrentPage(pageNumber);
     return (
         <div className='cards-dashboard'>
 
@@ -60,44 +57,49 @@ const EventCards = ({events}) => {
 
             {/* Event Cards */}
             <h3>Event List</h3>
+            {!loading&&
             <div className="cards-container">
-                <h3>Event List</h3>
+                {/* <h3>Event List</h3> */}
                 {events.length > 0 ? (
                     events.map((event, index) => (
                         <div className="event-card" key={event.id}>
                             <h4>{event.title}</h4>
                             <p>{event.description}</p>
                             {/* <p><strong>Location:</strong> {event.location}</p> */}
-                            <p><strong>Start Date:</strong> {new Date(event.start_date).toLocaleString()}</p>
-                            <p><strong>End Date:</strong> {new Date(event.end_date).toLocaleString()}</p>
+                            <p><strong>Start Date:</strong> {new Date(event.start_time).toLocaleString()}</p>
+                            <p><strong>End Date:</strong> {new Date(event.end_time).toLocaleString()}</p>
                             <p><strong>Organizer:</strong> {event.organizer}</p>
-                            <p><strong>is_public:</strong> {event.is_public}</p>
-                            <div className="event-actions">
-                                <button
-                                    className="action-btn"
-                                    onClick={() => toggleEventStatus(event.id)}
-                                >
-                                    {event.is_public ? 'Mark Private' : 'Mark Public'}
-                                </button>
-                                <button className="action-btn">View</button>
-                                <button className="action-btn">Edit</button>
-                                <button className="action-btn delete-btn">Delete</button>
-                            </div>
+                            <p><strong>Type:</strong> {event.is_public? 'Public' : 'Private'}</p>
+                            {
+                                usertype=='organizer'&&
+                                <div className="event-actions">
+                                    <button
+                                        className="action-btn"
+                                        style={{width:"100px"}}
+                                        onClick={() => toggleEventStatus(event.id)}
+                                    >
+                                        {event.is_public ? 'Mark Private' : 'Mark Public'}
+                                    </button>
+                                    <button className="action-btn">View</button>
+                                    <button className="action-btn">Edit</button>
+                                    <button className="action-btn delete-btn">Delete</button>
+                                </div>
+                            }
                         </div>
                     ))
                 ) : (
                     <div className="no-events">No events available</div>
                 )}
-            </div>
+            </div>}
 
             {/* Pagination */}
-            <div className="pagination">
+            {/* <div className="pagination">
                 {[...Array(Math.ceil(events.length / eventsPerPage)).keys()].map(number => (
                     <button key={number} onClick={() => paginate(number + 1)}>
                         {number + 1}
                     </button>
                 ))}
-            </div>
+            </div> */}
         </div>
     );
 };

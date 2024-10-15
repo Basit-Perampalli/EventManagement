@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 export const useWebSocket = (url) => {
-    const [socket, setSocket] = useState(null);
+    // const [socket, setSocket] = useState(null);
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
@@ -15,7 +15,8 @@ export const useWebSocket = (url) => {
         // Listen for messages
         ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
-            setMessages((prevMessages) => [...prevMessages, message]);
+            // setMessages((prevMessages) => [...prevMessages, message]);
+            setMessages(message);
         };
 
         ws.onclose = () => {

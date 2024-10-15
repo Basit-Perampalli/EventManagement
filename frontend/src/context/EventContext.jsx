@@ -2,6 +2,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { UserContext } from './UserContext';
 import { toast } from 'react-toastify';
+import { useWebSocket } from '../test/useWebSocket';
 
 export const EventContext = createContext();
 
@@ -11,6 +12,8 @@ export const EventProvider = ({ children }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [locationFilter, setLocationFilter] = useState('');
     const [dateFilter, setDateFilter] = useState('');
+    const url = 'ws://localhost:8000/ws/';
+    const messages = useWebSocket(url);
     
     const fetchEvents = async () => {
         setLoading(true);
@@ -35,11 +38,20 @@ export const EventProvider = ({ children }) => {
             setLoading(false);
         }
     };
-    const eventurl = 
+    // const eventurl = 
     useEffect(() => {
         console.log(searchTerm,dateFilter)
-        fetchEvents(eventurl);
+        fetchEvents();
     }, [searchTerm,dateFilter]);
+
+    useEffect(()=>{
+        console.log(messages)
+        if (messages.event_type==='delete'){
+            setEvents(events.filter((e)=>e.id!==messages.data.id))
+        }else{
+            setEvents(events.map((e)=>e.id===messages.data.id?messages.data:e))
+        }
+    },[messages])
 
     const toggleEventStatus = async (eventId) => {
         console.log(eventId)
