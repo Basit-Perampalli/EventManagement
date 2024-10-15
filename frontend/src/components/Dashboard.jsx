@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import EventCards from './EventCards';
+import '../App.css'
 import axios from 'axios';
 
 const Dashboard = () => {

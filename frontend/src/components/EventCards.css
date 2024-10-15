@@ -1,11 +1,47 @@
 .cards-dashboard {
     padding: 20px;
+    width: 100%;
 }
 
 .search-filters {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    width: 100%;
+    padding-bottom: 10px;
+    border-bottom: 1px solid gray;
+}
+
+.label-eventcard {
+    font-size: 14px;
+}
+
+.search-input {
+    height: 40px;
+    width: 100%;
+    max-width: 400px;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: 1.5px solid gainsboro;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* On focus, add a highlight */
+.search-input:focus {
+    border-color: #1D5CAB;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.innerdiv-eventcard {
+    height: 50px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .cards-container {

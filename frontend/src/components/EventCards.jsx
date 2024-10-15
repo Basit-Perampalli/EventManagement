@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import './EventCards.css'; 
+import './EventCards.css';
+import '../App.css'
 const WEBSOCKET_URL = 'ws://your-django-backend-url/ws/events/';
 
 const EventCards = () => {
@@ -91,10 +92,10 @@ const EventCards = () => {
 
     return (
         <div className='cards-dashboard'>
-        
+
             <div className="search-filters">
-                <div>
-                    <label htmlFor="titleSearch">Search by Title</label>
+                <div className='innerdiv-eventcard'>
+                    <label htmlFor="titleSearch" className='label-eventcard'>Search by Title</label>
                     <input
                         type="text"
                         id="titleSearch"
@@ -103,8 +104,8 @@ const EventCards = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
-                <div>
-                    <label htmlFor="locationFilter">Search by Location</label>
+                <div className='innerdiv-eventcard' >
+                    <label htmlFor="locationFilter" className='label-eventcard'>Search by Location</label>
                     <input
                         type="text"
                         id="locationFilter"
@@ -113,8 +114,8 @@ const EventCards = () => {
                         onChange={(e) => setLocationFilter(e.target.value)}
                     />
                 </div>
-                <div>
-                    <label htmlFor="startDate">Start Date</label>
+                <div className='innerdiv-eventcard'>
+                    <label htmlFor="startDate" className='label-eventcard'>Start Date</label>
                     <input
                         type="date"
                         id="startDate"
@@ -123,8 +124,8 @@ const EventCards = () => {
                         onChange={(e) => setStartDateFilter(e.target.value)}
                     />
                 </div>
-                <div>
-                    <label htmlFor="endDate">End Date</label>
+                <div className='innerdiv-eventcard'>
+                    <label htmlFor="endDate" className='label-eventcard'>End Date</label>
                     <input
                         type="date"
                         id="endDate"
