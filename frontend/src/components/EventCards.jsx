@@ -3,7 +3,7 @@ import './EventCards.css';
 import '../App.css'
 import { EventContext } from '../context/EventContext';
 
-const EventCards = ({ events }) => {
+const EventCards = ({ events,usertype }) => {
 
     // const [currentPage, setCurrentPage] = useState(1);
     // const [eventsPerPage] = useState(10);
