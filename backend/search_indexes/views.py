@@ -18,7 +18,7 @@ class EventViewSet(ViewSet):
         lon = request.GET.get('lon', None)
 
         search = EventDocument.search()
-
+        print(search_query)
         if search_query:
             search = search.query(
                 "bool",
@@ -46,13 +46,15 @@ class EventViewSet(ViewSet):
                 return Response({"error": "Invalid latitude or longitude"}, status=400)
 
         # Execute search and return results
+        search = search[:100]
         response = search.execute()
-        # print(response)
-        for i in response:
-            print(i)
+        print(len(response))
+        # for i in response:
+        #     print(i)
         results = [hit.to_dict() for hit in response]
 
         # Serialize results
-        # print(results)
-        serializer = EventDocumentSerializer(response, many=True)
+        print(len(results))
+        serializer = EventDocumentSerializer(results, many=True)
+        # print(serializer.data)
         return Response(serializer.data)
