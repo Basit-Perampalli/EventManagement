@@ -4,9 +4,13 @@ import Signup from './components/Signup';
 import Home from './components/Home';
 import ForgotPassword from './components/ForgotPassword'; // Import ForgotPassword component
 import './App.css';
+import  { EventProvider } from'./context/EventContext'
+import { UserProvider } from './context/UserContext'
 
 const App = () => {
   return (
+    <UserProvider>
+     <EventProvider>
     <Router>
       <div className="App">
         <Routes>
@@ -24,6 +28,8 @@ const App = () => {
         </Routes>
       </div>
     </Router>
+    </EventProvider>
+    </UserProvider>
   );
 };
 
