@@ -1,85 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import './EventCards.css';
-import '../App.css';
+import '../App.css'
+import { EventContext } from '../context/EventContext';
 
-const WEBSOCKET_URL = 'ws://your-django-backend-url/ws/events/';
+const EventCards = ({ events,usertype }) => {
 
-const EventCards = () => {
-    const [events, setEvents] = useState([]);
-    const [filteredEvents, setFilteredEvents] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [locationFilter, setLocationFilter] = useState('');
-    const [startDateFilter, setStartDateFilter] = useState('');
-    const [endDateFilter, setEndDateFilter] = useState('');
-    const [currentPage, setCurrentPage] = useState(1);
-    const [eventsPerPage] = useState(10);
+    // const [currentPage, setCurrentPage] = useState(1);
+    // const [eventsPerPage] = useState(10);
     const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
 
-    useEffect(() => {
-        const fetchEvents = async () => {
-            try {
-                const token = localStorage.getItem('accessToken');
-                const response = await fetch('http://localhost:8000/search/events/', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                setEvents(data);
-                setFilteredEvents(data);
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchEvents();
-    }, []);
-
-    // Filter Events based on search, location, and date
-    useEffect(() => {
-        const filtered = events.filter(event => {
-            const matchesSearchTerm = event.title.toLowerCase().includes(searchTerm.toLowerCase());
-            const matchesLocation = locationFilter === '' || event.location.toLowerCase().includes(locationFilter.toLowerCase());
-            const matchesDateRange = (startDateFilter === '' || new Date(event.start_date) >= new Date(startDateFilter)) &&
-                (endDateFilter === '' || new Date(event.end_date) <= new Date(endDateFilter));
-            return matchesSearchTerm && matchesLocation && matchesDateRange;
-        });
-        setFilteredEvents(filtered);
-    }, [events, searchTerm, locationFilter, startDateFilter, endDateFilter]);
-
-    const indexOfLastEvent = currentPage * eventsPerPage;
-    const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
-    const currentEvents = filteredEvents.slice(indexOfFirstEvent, indexOfLastEvent);
-
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-    const toggleEventStatus = async (eventId, currentStatus) => {
-        try {
-            const response = await fetch(`http://localhost:8000/event/${eventId}/toggle/`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: currentStatus === 'public' ? 'private' : 'public' })
-            });
-            if (response.ok) {
-                const updatedEvent = await response.json();
-                setEvents((prevEvents) =>
-                    prevEvents.map(event => (event.id === eventId ? updatedEvent : event))
-                );
-            }
-        } catch (error) {
-            setError(`Failed to toggle event status: ${error.message}`);
-        }
-    };
+    const { searchTerm, setSearchTerm, locationFilter, deleteEvent, toggleEventStatus, setLocationFilter, dateFilter, setDateFilter, loading } = useContext(EventContext)
 
     const handleEditChange = (e) => {
         setSelectedEvent({ ...selectedEvent, [e.target.name]: e.target.value });
@@ -112,18 +43,19 @@ const EventCards = () => {
         setIsEditPopupOpen(true);
     };
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    // useEffect(() => {
+    //     const ut = localStorage.getItem('usertype');
+    //     setUsertype(ut)
+    // }, []);
 
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
-
+    // const indexOfLastEvent = currentPage * eventsPerPage;
+    // const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
+    // events = events.slice(indexOfFirstEvent, indexOfLastEvent);
+    // const paginate = (pageNumber) => setCurrentPage(pageNumber);
     return (
         <div className='cards-dashboard'>
+
             <div className="search-filters">
-                {/* Search filters for title, location, and date */}
                 <div className='innerdiv-eventcard'>
                     <label htmlFor="titleSearch" className='label-eventcard'>Search by Title</label>
                     <input
@@ -134,7 +66,7 @@ const EventCards = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
-                <div className='innerdiv-eventcard'>
+                <div className='innerdiv-eventcard' >
                     <label htmlFor="locationFilter" className='label-eventcard'>Search by Location</label>
                     <input
                         type="text"
@@ -145,66 +77,62 @@ const EventCards = () => {
                     />
                 </div>
                 <div className='innerdiv-eventcard'>
-                    <label htmlFor="startDate" className='label-eventcard'>Start Date</label>
+                    <label htmlFor="date" className='label-eventcard'>Filter by Date</label>
                     <input
                         type="date"
-                        id="startDate"
+                        id="date"
                         className="search-input"
-                        value={startDateFilter}
-                        onChange={(e) => setStartDateFilter(e.target.value)}
-                    />
-                </div>
-                <div className='innerdiv-eventcard'>
-                    <label htmlFor="endDate" className='label-eventcard'>End Date</label>
-                    <input
-                        type="date"
-                        id="endDate"
-                        className="search-input"
-                        value={endDateFilter}
-                        onChange={(e) => setEndDateFilter(e.target.value)}
+                        value={dateFilter}
+                        onChange={(e) => setDateFilter(e.target.value)}
                     />
                 </div>
             </div>
 
             {/* Event Cards */}
             <h3>Event List</h3>
+            {!loading&&
             <div className="cards-container">
-                {currentEvents.length > 0 ? (
-                    currentEvents.map((event) => (
+                {/* <h3>Event List</h3> */}
+                {events.length > 0 ? (
+                    events.map((event, index) => (
                         <div className="event-card" key={event.id}>
-                            <h4>{event.title}</h4>
-                            <p>{event.description}</p>
-                            <p><strong>Start Date:</strong> {new Date(event.start_date).toLocaleString()}</p>
-                            <p><strong>End Date:</strong> {new Date(event.end_date).toLocaleString()}</p>
+                            <h3 style={{marginBottom:"20px"}}>{event.title}</h3>
+                            <p style={{marginBottom:"20px"}}>{event.description}</p>
+                            {/* <p><strong>Location:</strong> {event.location}</p> */}
+                            <p><strong>Start Date:</strong> {new Date(event.start_time).toLocaleString()}</p>
+                            <p><strong>End Date:</strong> {new Date(event.end_time).toLocaleString()}</p>
                             <p><strong>Organizer:</strong> {event.organizer}</p>
-                            <p><strong>Status:</strong> {event.is_public ? 'Public' : 'Private'}</p>
-                            <div className="event-actions">
-                                <button
-                                    className="action-btn"
-                                    onClick={() => toggleEventStatus(event.id, event.is_public)}
-                                >
-                                    {event.is_public ? 'Mark Private' : 'Mark Public'}
-                                </button>
-                                <button className="action-btn" onClick={() => handleEditClick(event)}>Edit</button>
-                                <button className="action-btn delete-btn">Delete</button>
-                            </div>
+                            <p><strong>Type:</strong> {event.is_public? 'Public' : 'Private'}</p>
+                            {
+                                usertype=='organizer'&&
+                                <div className="event-actions">
+                                    <button
+                                        className="action-btn"
+                                        style={{width:"100px"}}
+                                        onClick={() => toggleEventStatus(event.id)}
+                                    >
+                                        {event.is_public ? 'Mark Private' : 'Mark Public'}
+                                    </button>
+                                    <button className="action-btn">View</button>
+                                    <button className="action-btn" onClick={() => handleEditClick(event)}>Edit</button>
+                                    <button className="action-btn delete-btn" onClick={() => deleteEvent(event.id)}>Delete</button>
+                                </div>
+                            }
                         </div>
                     ))
                 ) : (
                     <div className="no-events">No events available</div>
                 )}
-            </div>
+            </div>}
 
             {/* Pagination */}
-            <div className="pagination">
-                {[...Array(Math.ceil(filteredEvents.length / eventsPerPage)).keys()].map(number => (
+            {/* <div className="pagination">
+                {[...Array(Math.ceil(events.length / eventsPerPage)).keys()].map(number => (
                     <button key={number} onClick={() => paginate(number + 1)}>
                         {number + 1}
                     </button>
                 ))}
-            </div>
-
-            {/* Edit Event Popup */}
+            </div> */}
             {isEditPopupOpen && selectedEvent && (
                 <div className="edit-popup">
                     <div className="edit-popup-content">
