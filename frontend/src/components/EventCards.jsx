@@ -59,6 +59,7 @@ const EventCards = ({events}) => {
             </div>
 
             {/* Event Cards */}
+            <h3>Event List</h3>
             <div className="cards-container">
                 <h3>Event List</h3>
                 {events.length > 0 ? (

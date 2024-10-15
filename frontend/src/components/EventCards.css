@@ -1,6 +1,19 @@
+/* Add this at the top of your CSS file */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 .cards-dashboard {
     padding: 20px;
-    width: 100%;
+    /* Adjust if needed */
+    width: calc(100% - 40px);
+    /* Consider the padding */
+    margin: 0 auto;
+    /* Center the content */
+    box-sizing: border-box;
+    /* Ensure padding is included in width */
 }
 
 .search-filters {
@@ -48,7 +61,14 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
+    width: 100%;
+    /* Make sure it takes full width */
+    margin: 0;
+    /* Remove any margins */
+    padding: 12px;
+    /* Remove any padding */
 }
+
 
 .event-card {
     background: #fff;
