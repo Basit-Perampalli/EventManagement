@@ -42,7 +42,7 @@ export const EventProvider = ({ children }) => {
         }, [searchTerm, dateFilter]);
 
     const deleteEvent = async (eventId) => {
-        console.log(eventId)
+        console.log(eventId);
         try {
             const token = localStorage.getItem('accessToken');
             const response = await fetch(`http://127.0.0.1:8000/event/${eventId}/delete/`, {
@@ -51,15 +51,19 @@ export const EventProvider = ({ children }) => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-
             });
             if (response.ok) {
-                toast.info('Successfully deleted')
+                toast.info('Successfully deleted');
+                // Update the events state to remove the deleted event
+                setEvents((prevEvents) => prevEvents.filter((event) => event.id !== eventId));
+            } else {
+                throw new Error('Failed to delete the event');
             }
         } catch (error) {
-            console.log(`Failed to delete event : ${error}`);
+            console.log(`Failed to delete event: ${error}`);
         }
     };
+
     const toggleEventStatus = async (eventId) => {
         console.log(eventId)
         try {

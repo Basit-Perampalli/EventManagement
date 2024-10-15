@@ -81,6 +81,7 @@ const EventCards = ({ events }) => {
                                 <button className="action-btn">View</button>
                                 <button className="action-btn">Edit</button>
                                 <button className="action-btn delete-btn" onClick={() => deleteEvent(event.id)}>Delete</button>
+
                             </div>
                         </div>
                     ))
