@@ -1,71 +1,67 @@
 
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { UserContext } from './UserContext';
+import { toast } from 'react-toastify';
 
 export const EventContext = createContext();
 
 export const EventProvider = ({ children }) => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const WEBSOCKET_URL = 'ws://your-django-backend-url/ws/events/';
-    const { user } = useContext(UserContext);
-    const [socket, setSocket] = useState(null);
-
-    useEffect(() => {
-        const fetchEvents = async () => {
-            try {
-                const response = await fetch('http://127.0.0.1:8000/event/all/');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                setEvents(data);
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchEvents();
-
-        const ws = new WebSocket(WEBSOCKET_URL);
-        ws.onmessage = (event) => {
-            const updatedEvent = JSON.parse(event.data);
-            setEvents((prevEvents) =>
-                prevEvents.map(ev => ev.id === updatedEvent.id ? updatedEvent : ev)
-            );
-        };
-        setSocket(ws);
-
-        return () => {
-            if (ws) {
-                ws.close();
-            }
-        };
-    }, []);
-
-    const toggleEventStatus = async (eventId, currentStatus) => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [locationFilter, setLocationFilter] = useState('');
+    const [dateFilter, setDateFilter] = useState('');
+    
+    const fetchEvents = async () => {
+        setLoading(true);
         try {
-            const response = await fetch(`http://127.0.0.1:8000/events/${eventId}/toggle/`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: currentStatus === 'public' ? 'private' : 'public' })
+            const token = localStorage.getItem('accessToken');
+            const response = await fetch('http://localhost:8000/search/events/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`, // Include the authorization token
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            console.log(data)
+            setEvents(data);
+        } catch (error) {
+            console.log(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+    const eventurl = 
+    useEffect(() => {
+        console.log(searchTerm,dateFilter)
+        fetchEvents(eventurl);
+    }, [searchTerm,dateFilter]);
+
+    const toggleEventStatus = async (eventId) => {
+        console.log(eventId)
+        try {
+            const token = localStorage.getItem('accessToken');
+            const response = await fetch(`http://127.0.0.1:8000/event/${eventId}/toggle/`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                 },
+                
             });
             if (response.ok) {
-                const updatedEvent = await response.json();
-                setEvents((prevEvents) =>
-                    prevEvents.map(event => (event.id === eventId ? updatedEvent : event))
-                );
+                toast.info('Successfully changed the visibility')
             }
         } catch (error) {
-            setError(`Failed to toggle event status: ${error}`);
+            console.log(`Failed to toggle event status: ${error}`);
         }
     };
 
     return (
-        <EventContext.Provider value={{ events, loading, error, toggleEventStatus, setEvents }}>
+        <EventContext.Provider value={{ events, loading, toggleEventStatus, setEvents,searchTerm, setSearchTerm,locationFilter, setLocationFilter,dateFilter, setDateFilter }}>
             {children}
         </EventContext.Provider>
     );

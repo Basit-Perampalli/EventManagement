@@ -47,8 +47,12 @@ class EventViewSet(ViewSet):
 
         # Execute search and return results
         response = search.execute()
+        # print(response)
+        for i in response:
+            print(i)
         results = [hit.to_dict() for hit in response]
 
         # Serialize results
-        serializer = EventDocumentSerializer(results, many=True)
+        # print(results)
+        serializer = EventDocumentSerializer(response, many=True)
         return Response(serializer.data)
