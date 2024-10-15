@@ -4,12 +4,12 @@ import '../App.css'
 import { EventContext } from '../context/EventContext';
 const WEBSOCKET_URL = 'ws://your-django-backend-url/ws/events/';
 
-const EventCards = ({events}) => {
-    
+const EventCards = ({ events }) => {
+
     const [currentPage, setCurrentPage] = useState(1);
     const [eventsPerPage] = useState(10);
 
-    const{searchTerm, setSearchTerm,locationFilter,toggleEventStatus, setLocationFilter,dateFilter, setDateFilter,loading} = useContext(EventContext)
+    const { searchTerm, setSearchTerm, locationFilter, deleteEvent, toggleEventStatus, setLocationFilter, dateFilter, setDateFilter, loading } = useContext(EventContext)
 
     // useEffect(() => {
 
@@ -61,7 +61,6 @@ const EventCards = ({events}) => {
             {/* Event Cards */}
             <h3>Event List</h3>
             <div className="cards-container">
-                <h3>Event List</h3>
                 {events.length > 0 ? (
                     events.map((event, index) => (
                         <div className="event-card" key={event.id}>
@@ -81,7 +80,7 @@ const EventCards = ({events}) => {
                                 </button>
                                 <button className="action-btn">View</button>
                                 <button className="action-btn">Edit</button>
-                                <button className="action-btn delete-btn">Delete</button>
+                                <button className="action-btn delete-btn" onClick={() => deleteEvent(event.id)}>Delete</button>
                             </div>
                         </div>
                     ))

@@ -11,7 +11,7 @@ export const EventProvider = ({ children }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [locationFilter, setLocationFilter] = useState('');
     const [dateFilter, setDateFilter] = useState('');
-    
+
     const fetchEvents = async () => {
         setLoading(true);
         try {
@@ -35,22 +35,42 @@ export const EventProvider = ({ children }) => {
             setLoading(false);
         }
     };
-    const eventurl = 
-    useEffect(() => {
-        console.log(searchTerm,dateFilter)
-        fetchEvents(eventurl);
-    }, [searchTerm,dateFilter]);
+    const eventurl =
+        useEffect(() => {
+            console.log(searchTerm, dateFilter)
+            fetchEvents(eventurl);
+        }, [searchTerm, dateFilter]);
 
+    const deleteEvent = async (eventId) => {
+        console.log(eventId)
+        try {
+            const token = localStorage.getItem('accessToken');
+            const response = await fetch(`http://127.0.0.1:8000/event/${eventId}/delete/`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+
+            });
+            if (response.ok) {
+                toast.info('Successfully deleted')
+            }
+        } catch (error) {
+            console.log(`Failed to delete event : ${error}`);
+        }
+    };
     const toggleEventStatus = async (eventId) => {
         console.log(eventId)
         try {
             const token = localStorage.getItem('accessToken');
             const response = await fetch(`http://127.0.0.1:8000/event/${eventId}/toggle/`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json',
+                headers: {
+                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
-                 },
-                
+                },
+
             });
             if (response.ok) {
                 toast.info('Successfully changed the visibility')
@@ -60,8 +80,9 @@ export const EventProvider = ({ children }) => {
         }
     };
 
+
     return (
-        <EventContext.Provider value={{ events, loading, toggleEventStatus, setEvents,searchTerm, setSearchTerm,locationFilter, setLocationFilter,dateFilter, setDateFilter }}>
+        <EventContext.Provider value={{ events, loading, deleteEvent, toggleEventStatus, setEvents, searchTerm, setSearchTerm, locationFilter, setLocationFilter, dateFilter, setDateFilter }}>
             {children}
         </EventContext.Provider>
     );
