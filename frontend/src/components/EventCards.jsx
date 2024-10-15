@@ -22,12 +22,12 @@ const EventCards = () => {
             try {
                 const token = localStorage.getItem('accessToken');
                 const response = await fetch('http://localhost:8000/search/events/', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`, // Include the authorization token
-                },
-            });
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`, // Include the authorization token
+                    },
+                });
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -143,7 +143,7 @@ const EventCards = () => {
                         value={endDateFilter}
                         onChange={(e) => setEndDateFilter(e.target.value)}
                     />
-                </div> */}
+                </div>
             </div>
 
             {/* Event Cards */}
