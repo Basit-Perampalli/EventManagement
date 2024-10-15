@@ -4,6 +4,7 @@ const WEBSOCKET_URL = 'ws://your-django-backend-url/ws/events/';
 
 const EventCards = () => {
     const [events, setEvents] = useState([]);
+    const [filteredEvents, setFilteredEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
@@ -18,12 +19,21 @@ const EventCards = () => {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await fetch('http://localhost:8000/event/all/');
+                const token = localStorage.getItem('accessToken');
+                const response = await fetch('http://localhost:8000/search/events/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`, // Include the authorization token
+                },
+            });
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
+                console.log(data)
                 setEvents(data);
+                setFilteredEvents(data)
             } catch (error) {
                 setError(error.message);
             } finally {
@@ -33,33 +43,33 @@ const EventCards = () => {
 
         fetchEvents();
 
-        const ws = new WebSocket(WEBSOCKET_URL);
-        ws.onmessage = (event) => {
-            const updatedEvent = JSON.parse(event.data);
-            setEvents((prevEvents) =>
-                prevEvents.map(ev => ev.id === updatedEvent.id ? updatedEvent : ev)
-            );
-        };
-        setSocket(ws);
+        // const ws = new WebSocket(WEBSOCKET_URL);
+        // ws.onmessage = (event) => {
+        //     const updatedEvent = JSON.parse(event.data);
+        //     setEvents((prevEvents) =>
+        //         prevEvents.map(ev => ev.id === updatedEvent.id ? updatedEvent : ev)
+        //     );
+        // };
+        // setSocket(ws);
 
-        return () => {
-            if (ws) {
-                ws.close();
-            }
-        };
+        // return () => {
+        //     if (ws) {
+        //         ws.close();
+        //     }
+        // };
     }, []);
 
     const handleEventCreated = () => {
         setRefreshEvents(prev => !prev); // Toggle refresh state to fetch events again
     };
 
-    const filteredEvents = events.filter(event => {
-        const matchesSearchTerm = event.title.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesLocation = locationFilter === '' || event.location.toLowerCase().includes(locationFilter.toLowerCase());
-        const matchesDateRange = (startDateFilter === '' || new Date(event.start_date) >= new Date(startDateFilter)) &&
-            (endDateFilter === '' || new Date(event.end_date) <= new Date(endDateFilter));
-        return matchesSearchTerm && matchesLocation && matchesDateRange;
-    });
+    // const filteredEvents = events.filter(event => {
+    //     const matchesSearchTerm = event.title.toLowerCase().includes(searchTerm.toLowerCase());
+    //     const matchesLocation = locationFilter === '' || event.location.toLowerCase().includes(locationFilter.toLowerCase());
+    //     const matchesDateRange = (startDateFilter === '' || new Date(event.start_date) >= new Date(startDateFilter)) &&
+    //         (endDateFilter === '' || new Date(event.end_date) <= new Date(endDateFilter));
+    //     return matchesSearchTerm && matchesLocation && matchesDateRange;
+    // });
 
     const indexOfLastEvent = currentPage * eventsPerPage;
     const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
@@ -114,7 +124,7 @@ const EventCards = () => {
                     />
                 </div>
                 <div>
-                    <label htmlFor="startDate">Start Date</label>
+                    <label htmlFor="startDate">Date</label>
                     <input
                         type="date"
                         id="startDate"
@@ -123,7 +133,7 @@ const EventCards = () => {
                         onChange={(e) => setStartDateFilter(e.target.value)}
                     />
                 </div>
-                <div>
+                {/* <div>
                     <label htmlFor="endDate">End Date</label>
                     <input
                         type="date"
@@ -132,7 +142,7 @@ const EventCards = () => {
                         value={endDateFilter}
                         onChange={(e) => setEndDateFilter(e.target.value)}
                     />
-                </div>
+                </div> */}
             </div>
 
             {/* Event Cards */}
@@ -143,7 +153,7 @@ const EventCards = () => {
                         <div className="event-card" key={event.id}>
                             <h4>{event.title}</h4>
                             <p>{event.description}</p>
-                            <p><strong>Location:</strong> {event.location}</p>
+                            {/* <p><strong>Location:</strong> {event.location}</p> */}
                             <p><strong>Start Date:</strong> {new Date(event.start_date).toLocaleString()}</p>
                             <p><strong>End Date:</strong> {new Date(event.end_date).toLocaleString()}</p>
                             <p><strong>Organizer:</strong> {event.organizer}</p>

@@ -3,8 +3,15 @@ import CompleteImg from '../assets/calendar-check.png';
 import Dashboard from '../assets/dashboard.png';
 import PendingEvent from '../assets/agenda.png';
 import '../App.css';
+import { useEffect, useState } from 'react';
 
-const Sidebar = ({ userRole, onCreateEventClick }) => {
+const Sidebar = ({ onCreateEventClick }) => {
+    const [user_type,setUser_type] = useState('');
+    
+    useEffect(()=>{
+        const userType = localStorage.getItem('usertype')
+        setUser_type(userType)
+    })
     return (
         <div className="sidebar">
             <div className="profile-section">
@@ -13,7 +20,7 @@ const Sidebar = ({ userRole, onCreateEventClick }) => {
             </div>
             <nav>
                 <ul>
-                    {userRole === 'organizer' && (
+                    {user_type === 'organizer' && (
                         <>
                             <li>
                                 <div className='sidebar-icons'>
@@ -41,7 +48,7 @@ const Sidebar = ({ userRole, onCreateEventClick }) => {
                             </li>
                         </>
                     )}
-                    {userRole === 'user' && (
+                    {user_type === 'regular' && (
                         <>
                             <li>
                                 <div className='sidebar-icons'>
