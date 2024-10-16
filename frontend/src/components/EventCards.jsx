@@ -92,7 +92,7 @@ const EventCards = ({ events,usertype }) => {
             </>}
 
             {/* Event Cards */}
-            <h3>Event List</h3>
+            {/* <h3>Event List</h3> */}
             {!loading&&
             <div className="cards-container">
                 {/* <h3>Event List</h3> */}
@@ -104,7 +104,7 @@ const EventCards = ({ events,usertype }) => {
                             {/* <p><strong>Location:</strong> {event.location}</p> */}
                             <p><strong>Start Date:</strong> {new Date(event.start_time).toLocaleString()}</p>
                             <p><strong>End Date:</strong> {new Date(event.end_time).toLocaleString()}</p>
-                            <p><strong>Organizer:</strong> {event.organizer}</p>
+                            {/* <p><strong>Organizer:</strong> {event.organizer}</p> */}
                             <p><strong>Type:</strong> {event.is_public? 'Public' : 'Private'}</p>
                             {
                                 usertype=='organizer'&&

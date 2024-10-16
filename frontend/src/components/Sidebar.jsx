@@ -30,18 +30,18 @@ const Sidebar = ({ onCreateEventClick }) => {
                                 </div>
                                 <div>Dashboard</div>
                             </li>
-                            {/* <li onClick={()=> {navigate('upcomingevents');setCurrRoute('upcomingevents');clearFilters()}}>
+                            <li onClick={()=> {navigate('upcomingevents');clearFilters()}}>
                                 <div className='sidebar-icons'>
                                     <img src={PendingEvent} alt="Upcoming Events" />
                                 </div>
                                 <div>Upcoming Events</div>
                             </li>
-                            <li onClick={()=> {navigate('completedevents');setCurrRoute('completedevents');clearFilters()}}>
+                            <li onClick={()=> {navigate('completedevents');clearFilters()}}>
                                 <div className='sidebar-icons'>
                                     <img src={CompleteImg} alt="Completed Events" />
                                 </div>
                                 <div>Completed Events</div>
-                            </li> */}
+                            </li>
                             {user_type === 'organizer' &&
                             <>
                             <li onClick={()=> {navigate('myevents');setCurrRoute('myevents');clearFilters()}}>

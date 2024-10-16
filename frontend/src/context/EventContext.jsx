@@ -24,14 +24,14 @@ export const EventProvider = ({ children }) => {
             //     filters+=""
             // }
             if(searchTerm){
-                filters+=`search=${searchTerm}&`
+                filters+=`&search=${searchTerm}`
             }
             if(dateFilter){
-                filters+=`date=${dateFilter}`
+                filters+=`&date=${dateFilter}`
             }
             console.log(filters)
             const token = localStorage.getItem('accessToken');
-            const response = await fetch(`http://localhost:8000/search/events/?${filters}`, {
+            const response = await fetch(`http://localhost:8000/search/events/?event=${currRoute}${filters}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

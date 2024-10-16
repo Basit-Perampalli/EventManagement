@@ -3,8 +3,10 @@ import EventCards from './EventCards';
 import { EventContext } from '../context/EventContext';
 
 const CompletedEvents = () => {
-  const {events} = useContext(EventContext)
-
+  const {events,setCurrRoute} = useContext(EventContext)
+  useEffect(()=>{
+    setCurrRoute('completed')
+  },[])
   return (
     <div>
       <h2>Completed Events</h2>
