@@ -62,7 +62,7 @@ export const EventProvider = ({ children }) => {
             console.log(messages)
             if (messages.event_type==='delete'){
                 console.log(messages.data)
-                console.log(events[11].id)
+                // console.log(events[11].id)
                 setEvents(events.filter((e)=>e.id!==messages.data.id))
             }
             if(messages.event_type==='create'){
@@ -85,9 +85,9 @@ export const EventProvider = ({ children }) => {
                 },
             });
             if (response.ok) {
-                toast.info('Successfully deleted');
+                // toast.info('Successfully deleted');
                 // Update the events state to remove the deleted event
-                setEvents((prevEvents) => prevEvents.filter((event) => event.id !== eventId));
+                // setEvents((prevEvents) => prevEvents.filter((event) => event.id !== eventId));
             } else {
                 throw new Error('Failed to delete the event');
             }
