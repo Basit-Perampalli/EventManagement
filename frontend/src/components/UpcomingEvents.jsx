@@ -1,36 +1,14 @@
-
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
+import EventCards from './EventCards';
+import { EventContext } from '../context/EventContext';
 
 const UpcomingEvents = () => {
-  const [events, setEvents] = useState([]);
-
-  useEffect(() => {
-    const fetchUpcomingEvents = async () => {
-      try {
-        const token = localStorage.getItem('accessToken');
-        const response = await axios.get('http://localhost:8000/event/upcoming/', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setEvents(response.data);
-      } catch (error) {
-        console.error('Error fetching upcoming events:', error);
-      }
-    };
-
-    fetchUpcomingEvents();
-  }, []);
+  const {events} = useContext(EventContext)
 
   return (
     <div>
-      <h2>Upcoming Events</h2>
-      <ul>
-        {events.map(event => (
-          <li key={event.id}>{event.title} - {event.start_date}</li>
-        ))}
-      </ul>
+      <h2>Completed Events</h2>
+      <EventCards events={events} usertype={'regular'} />
     </div>
   );
 };

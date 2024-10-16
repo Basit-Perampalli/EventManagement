@@ -35,6 +35,7 @@ class EventViewSet(ViewSet):
 
         if date:
             date_parsed = parse_datetime(date)
+            print(date_parsed)
             if date_parsed:
                 search = search.filter('range', start_time={'lte': date_parsed}).filter('range', end_time={'gte': date_parsed})
 

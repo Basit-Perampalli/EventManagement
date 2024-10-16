@@ -18,18 +18,18 @@ const EventCards = ({ events,usertype }) => {
 
     const handleEditSubmit = async (eventId) => {
         try {
-            const response = await fetch(`http://localhost:8000/event/${eventId}/edit/`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+            const token = localStorage.getItem('accessToken')
+            const response = await fetch(`http://localhost:8000/event/${eventId}/update/`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Authorization':`Bearer ${token}`},
                 body: JSON.stringify(selectedEvent)
             });
             if (response.ok) {
-                const updatedEvent = await response.json();
-                setEvents(prevEvents => prevEvents.map(event => (event.id === eventId ? updatedEvent : event)));
+                // const updatedEvent = await response.json();
                 closeEditPopup();
             }
         } catch (error) {
-            setError(`Failed to edit event: ${error.message}`);
+            console.log(`Failed to edit event: ${error.message}`);
         }
     };
 
@@ -55,7 +55,9 @@ const EventCards = ({ events,usertype }) => {
     return (
         <div className='cards-dashboard'>
 
-            <div className="search-filters">
+            {usertype==='regular'&&
+              <>
+                <div className="search-filters">
                 <div className='innerdiv-eventcard'>
                     <label htmlFor="titleSearch" className='label-eventcard'>Search by Title</label>
                     <input
@@ -64,7 +66,7 @@ const EventCards = ({ events,usertype }) => {
                         className="search-input"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                        />
                 </div>
                 <div className='innerdiv-eventcard' >
                     <label htmlFor="locationFilter" className='label-eventcard'>Search by Location</label>
@@ -84,9 +86,10 @@ const EventCards = ({ events,usertype }) => {
                         className="search-input"
                         value={dateFilter}
                         onChange={(e) => setDateFilter(e.target.value)}
-                    />
-                </div>
+                        />
+                </div>  
             </div>
+            </>}
 
             {/* Event Cards */}
             <h3>Event List</h3>

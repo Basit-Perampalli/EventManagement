@@ -12,14 +12,26 @@ export const EventProvider = ({ children }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [locationFilter, setLocationFilter] = useState('');
     const [dateFilter, setDateFilter] = useState('');
+    const [currRoute,setCurrRoute] = useState('home');
     const url = 'ws://localhost:8000/ws/';
     const messages = useWebSocket(url);
     
     const fetchEvents = async () => {
         setLoading(true);
         try {
+            var filters = ''
+            // if (currRoute==='upcomingevents'){
+            //     filters+=""
+            // }
+            if(searchTerm){
+                filters+=`search=${searchTerm}&`
+            }
+            if(dateFilter){
+                filters+=`date=${dateFilter}`
+            }
+            console.log(filters)
             const token = localStorage.getItem('accessToken');
-            const response = await fetch('http://localhost:8000/search/events/', {
+            const response = await fetch(`http://localhost:8000/search/events/?${filters}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -40,15 +52,23 @@ export const EventProvider = ({ children }) => {
     };
     // const eventurl =
         useEffect(() => {
+            const date = new Date();
+            console.log(date)
             console.log(searchTerm, dateFilter)
             fetchEvents();
-        }, [searchTerm, dateFilter]);
+        }, [searchTerm, dateFilter,currRoute]);
 
         useEffect(()=>{
             console.log(messages)
             if (messages.event_type==='delete'){
+                console.log(messages.data)
+                console.log(events[11].id)
                 setEvents(events.filter((e)=>e.id!==messages.data.id))
-            }else{
+            }
+            if(messages.event_type==='create'){
+                setEvents([...events,messages.data])
+            }
+            if(messages.event_type==='update'){
                 setEvents(events.map((e)=>e.id===messages.data.id?messages.data:e))
             }
         },[messages])
@@ -96,9 +116,13 @@ export const EventProvider = ({ children }) => {
         }
     };
 
+    const clearFilters = () =>{
+        setSearchTerm('')
+        setDateFilter('')
+    }
 
     return (
-        <EventContext.Provider value={{ events, loading, deleteEvent, toggleEventStatus, setEvents, searchTerm, setSearchTerm, locationFilter, setLocationFilter, dateFilter, setDateFilter }}>
+        <EventContext.Provider value={{ events, loading, deleteEvent, toggleEventStatus, setEvents, searchTerm, setSearchTerm, locationFilter, setLocationFilter, dateFilter, setDateFilter,currRoute,setCurrRoute,clearFilters }}>
             {children}
         </EventContext.Provider>
     );

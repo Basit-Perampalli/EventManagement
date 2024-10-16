@@ -6,6 +6,10 @@ import ForgotPassword from './components/ForgotPassword'; // Import ForgotPasswo
 import './App.css';
 import  { EventProvider } from'./context/EventContext'
 import { UserProvider } from './context/UserContext'
+import UpcomingEvents from './components/UpcomingEvents';
+import CompletedEvents from './components/CompletedEvents';
+import Dashboard from './components/Dashboard';
+import MyEvents from './components/MyEvents';
 
 const App = () => {
   return (
@@ -24,7 +28,12 @@ const App = () => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
 
           {/* Protected route for Home page */}
-          <Route path="/home" element={<Home />} />
+          <Route path="/home" element={<Home />} >
+            <Route path="/home" element={<Dashboard />} />
+            <Route path="myevents" element={<MyEvents />} />
+            <Route path="upcomingevents" element={<UpcomingEvents />} />
+            <Route path="completedevents" element={<CompletedEvents />} />
+          </Route>
         </Routes>
       </div>
     </Router>
