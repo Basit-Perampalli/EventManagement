@@ -111,13 +111,13 @@ const EventCards = ({ events, usertype }) => {
                                     <div className="event-actions">
                                         <button
                                             className="action-btn"
-                                            style={{ width: "100px" }}
+                                            style={{ width: "100px", backgroundColor: 'blueviolet' }}
                                             onClick={() => toggleEventStatus(event.id)}
                                         >
                                             {event.is_public ? 'Mark Private' : 'Mark Public'}
                                         </button>
-                                        <button className="action-btn">View</button>
-                                        <button className="action-btn" onClick={() => handleEditClick(event)}>Edit</button>
+                                        <button className="action-btn" style={{ backgroundColor: 'blue' }}>View</button>
+                                        <button className="action-btn" onClick={() => handleEditClick(event)} style={{ backgroundColor: 'green' }}>Edit</button>
                                         <button className="action-btn delete-btn" onClick={() => deleteEvent(event.id)}>Delete</button>
                                     </div>
                                 }
