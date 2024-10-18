@@ -2,15 +2,13 @@ import { useContext, useEffect, useState } from 'react';
 import './EventCards.css';
 import '../App.css'
 import { EventContext } from '../context/EventContext';
+import { motion } from 'framer-motion'; // Framer Motion for animations
 
 const EventCards = ({ events, usertype }) => {
 
-    // const [currentPage, setCurrentPage] = useState(1);
-    // const [eventsPerPage] = useState(10);
     const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
-
-    const { searchTerm, setSearchTerm, locationFilter, deleteEvent, toggleEventStatus, setLocationFilter, dateFilter, setDateFilter, loading } = useContext(EventContext)
+    const { searchTerm, setSearchTerm, locationFilter, deleteEvent, toggleEventStatus, setLocationFilter, dateFilter, setDateFilter, loading } = useContext(EventContext);
 
     const handleEditChange = (e) => {
         setSelectedEvent({ ...selectedEvent, [e.target.name]: e.target.value });
@@ -18,14 +16,13 @@ const EventCards = ({ events, usertype }) => {
 
     const handleEditSubmit = async (eventId) => {
         try {
-            const token = localStorage.getItem('accessToken')
+            const token = localStorage.getItem('accessToken');
             const response = await fetch(`http://localhost:8000/event/${eventId}/update/`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify(selectedEvent)
             });
             if (response.ok) {
-                // const updatedEvent = await response.json();
                 closeEditPopup();
             }
         } catch (error) {
@@ -43,101 +40,97 @@ const EventCards = ({ events, usertype }) => {
         setIsEditPopupOpen(true);
     };
 
-    // useEffect(() => {
-    //     const ut = localStorage.getItem('usertype');
-    //     setUsertype(ut)
-    // }, []);
-
-    // const indexOfLastEvent = currentPage * eventsPerPage;
-    // const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
-    // events = events.slice(indexOfFirstEvent, indexOfLastEvent);
-    // const paginate = (pageNumber) => setCurrentPage(pageNumber);
     return (
         <div className='cards-dashboard'>
-
-            {usertype === 'regular' &&
-                <>
-                    <div className="search-filters">
-                        <div className='innerdiv-eventcard'>
-                            <label htmlFor="titleSearch" className='label-eventcard'>Search by Title</label>
-                            <input
-                                type="text"
-                                id="titleSearch"
-                                className="search-input"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </div>
-                        <div className='innerdiv-eventcard' >
-                            <label htmlFor="locationFilter" className='label-eventcard'>Search by Location</label>
-                            <input
-                                type="text"
-                                id="locationFilter"
-                                className="search-input"
-                                value={locationFilter}
-                                onChange={(e) => setLocationFilter(e.target.value)}
-                            />
-                        </div>
-                        <div className='innerdiv-eventcard'>
-                            <label htmlFor="date" className='label-eventcard'>Filter by Date</label>
-                            <input
-                                type="date"
-                                id="date"
-                                className="search-input"
-                                value={dateFilter}
-                                onChange={(e) => setDateFilter(e.target.value)}
-                            />
-                        </div>
+            {usertype === 'regular' && (
+                <motion.div 
+                    className="search-filters"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <div className='innerdiv-eventcard'>
+                        <label htmlFor="titleSearch" className='label-eventcard'>Search by Title</label>
+                        <input
+                            type="text"
+                            id="titleSearch"
+                            className="search-input"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
                     </div>
-                </>}
+                    <div className='innerdiv-eventcard'>
+                        <label htmlFor="locationFilter" className='label-eventcard'>Search by Location</label>
+                        <input
+                            type="text"
+                            id="locationFilter"
+                            className="search-input"
+                            value={locationFilter}
+                            onChange={(e) => setLocationFilter(e.target.value)}
+                        />
+                    </div>
+                    <div className='innerdiv-eventcard'>
+                        <label htmlFor="date" className='label-eventcard'>Filter by Date</label>
+                        <input
+                            type="date"
+                            id="date"
+                            className="search-input"
+                            value={dateFilter}
+                            onChange={(e) => setDateFilter(e.target.value)}
+                        />
+                    </div>
+                </motion.div>
+            )}
 
-            {/* Event Cards */}
-            {/* <h3>Event List</h3> */}
-            {!loading &&
-                <div className="cards-container">
-                    {/* <h3>Event List</h3> */}
+            {loading ? (
+                <div className="loading-spinner">
+                    <div className="spinner"></div>
+                </div>
+            ) : (
+                <motion.div 
+                    className="cards-container"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                >
                     {events.length > 0 ? (
-                        events.map((event, index) => (
-                            <div className="event-card" key={event.id}>
-                                <h3 style={{ marginBottom: "20px" }}>{event.title}</h3>
-                                <p style={{ marginBottom: "20px" }}>{event.description}</p>
-                                {/* <p><strong>Location:</strong> {event.location}</p> */}
+                        events.map((event) => (
+                            <motion.div 
+                                className="event-card" 
+                                key={event.id}
+                                whileHover={{ scale: 1.05 }}
+                                transition={{ type: "spring", stiffness: 300 }}
+                            >
+                                <h3>{event.title}</h3>
+                                <p>{event.description}</p>
                                 <p><strong>Start Date:</strong> {new Date(event.start_time).toLocaleString()}</p>
                                 <p><strong>End Date:</strong> {new Date(event.end_time).toLocaleString()}</p>
-                                {/* <p><strong>Organizer:</strong> {event.organizer}</p> */}
                                 <p><strong>Type:</strong> {event.is_public ? 'Public' : 'Private'}</p>
-                                {
-                                    usertype == 'organizer' &&
+                                {usertype === 'organizer' && (
                                     <div className="event-actions">
-                                        <button
-                                            className="action-btn"
-                                            style={{ width: "100px", backgroundColor: 'blueviolet' }}
-                                            onClick={() => toggleEventStatus(event.id)}
-                                        >
+                                        <button className="action-btn" onClick={() => toggleEventStatus(event.id)}>
                                             {event.is_public ? 'Mark Private' : 'Mark Public'}
                                         </button>
-                                        <button className="action-btn" style={{ backgroundColor: 'blue' }}>View</button>
-                                        <button className="action-btn" onClick={() => handleEditClick(event)} style={{ backgroundColor: 'green' }}>Edit</button>
+                                        <button className="action-btn">View</button>
+                                        <button className="action-btn" onClick={() => handleEditClick(event)}>Edit</button>
                                         <button className="action-btn delete-btn" onClick={() => deleteEvent(event.id)}>Delete</button>
                                     </div>
-                                }
-                            </div>
+                                )}
+                            </motion.div>
                         ))
                     ) : (
                         <div className="no-events">No events available</div>
                     )}
-                </div>}
+                </motion.div>
+            )}
 
-            {/* Pagination */}
-            {/* <div className="pagination">
-                {[...Array(Math.ceil(events.length / eventsPerPage)).keys()].map(number => (
-                    <button key={number} onClick={() => paginate(number + 1)}>
-                        {number + 1}
-                    </button>
-                ))}
-            </div> */}
             {isEditPopupOpen && selectedEvent && (
-                <div className="edit-popup">
+                <motion.div 
+                    className="edit-popup"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
                     <div className="edit-popup-content">
                         <h3>Edit Event</h3>
                         <label>Title</label>
@@ -160,10 +153,10 @@ const EventCards = ({ events, usertype }) => {
                             value={selectedEvent.location}
                             onChange={handleEditChange}
                         />
-                        <button onClick={() => handleEditSubmit(selectedEvent.id)} style={{ height: '40px', width: '120px', backgroundColor: 'green', borderRadius: '5px', marginRight: '10px', color: 'white' }}>Save</button>
-                        <button onClick={closeEditPopup} style={{ height: '40px', width: '120px', backgroundColor: 'red', borderRadius: '5px', marginRight: '10px', color: 'white' }}>Cancel</button>
+                        <button onClick={() => handleEditSubmit(selectedEvent.id)}>Save</button>
+                        <button onClick={closeEditPopup}>Cancel</button>
                     </div>
-                </div>
+                </motion.div>
             )}
         </div>
     );
