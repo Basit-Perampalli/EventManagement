@@ -30,9 +30,9 @@ class Event(models.Model):
             'start_time': self.start_time.isoformat(),
             'end_time': self.end_time.isoformat(),
             'is_public': self.is_public,
-            'organizer': self.organizer.username,
-            'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat(),
+            # 'organizer': self.organizer.username,
+            # 'created_at': self.created_at.isoformat(),
+            # 'updated_at': self.updated_at.isoformat(),
         }
 
 # Signals for broadcasting real-time updates via WebSocket
