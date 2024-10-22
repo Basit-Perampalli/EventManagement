@@ -10,11 +10,11 @@ const Dashboard = () => {
     const [incompleteEvents, setIncompleteEvents] = useState(0);
     const [completeEvents, setCompleteEvents] = useState(0);
     // const [eventCategories, setEventCategories] = useState(0);
-    const {events} = useContext(EventContext)
+    const { events } = useContext(EventContext)
 
     const fetchEventsAnalytics = async () => {
         try {
-            
+
             if (events.length === 0) {
                 setTotalEvents(0);
                 setIncompleteEvents(0);
@@ -51,20 +51,20 @@ const Dashboard = () => {
                     <h3>{eventCategories}</h3>
                     <p>Event Categories</p>
                 </div> */}
-                <div className="stat-card" style={{ backgroundColor: '#28a745' }}>
+                <div className="stat-card" style={{ backgroundColor: '#00aaff' }}>
                     <h3>{totalEvents}</h3>
                     <p>Total Events</p>
                 </div>
-                <div className="stat-card" style={{ backgroundColor: '#ffc107' }}>
+                <div className="stat-card" style={{ backgroundColor: '#0074D9' }}>
                     <h3>{incompleteEvents}</h3>
                     <p>Incomplete Events</p>
                 </div>
-                <div className="stat-card" style={{ backgroundColor: '#ce3844' }}>
+                <div className="stat-card" style={{ backgroundColor: '#2C3E50' }}>
                     <h3>{completeEvents}</h3>
                     <p>Complete Events</p>
                 </div>
             </div>
-            <EventCards events={events} usertype={'regular'}/>
+            <EventCards events={events} usertype={'regular'} />
         </div>
     );
 };

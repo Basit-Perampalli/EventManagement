@@ -101,6 +101,7 @@
     color: white;
     cursor: pointer;
     border-radius: 3px;
+    background-color: rgb(41, 72, 129);
 }
 
 .delete-btn {
@@ -169,11 +170,13 @@
     background-color: #dc3545;
     color: white;
 }
+
 .loading-spinner {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Full viewport height */
+    height: 100vh;
+    /* Full viewport height */
 }
 
 .spinner {
@@ -186,9 +189,15 @@
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
+
 .event-card {
     transition: transform 0.2s ease-in-out;
 }
